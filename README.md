@@ -1,4 +1,4 @@
-# 个人博客 -- 作者：籽瓜
+# 个人博客 -- 作者：青泓栖月 所属工作室：Slience Deep Studio
 
 ## 博客地址：[https://www.sliencedeepstdio.top](https://www.sliencedeepstdio.top)
 
@@ -118,3 +118,13 @@
   - 编码技巧
 - 常见问题
 - 资源下载
+
+#### 网页制作
+
+- HTML5
+  - tailwindcss
+  - 编码技巧
+- CSS3
+  - 常规样式
+- JavaScript
+  - 基础语法

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,22 +7,89 @@
     <link rel="stylesheet" href="src/output.css" />
   </head>
   <body>
-    <header>
-      <nav class="flex justify-between items-center bg-gray-100 p-4">
-        <div>
-          <img src="" alt="logo" />
-          <h1>寂深博客.青泓栖月 boke</h1>
+    <header class="bg-gray-100 shadow-lg fixed top-0 left-0 w-full z-50">
+      <nav class="container mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center">
+          <a href="other_pages/sliencedeep.html"
+            ><img
+              src="img/logo.png"
+              alt="logo"
+              class="w-10 h-10 border-2 border-white rounded-full mr-2 shadow-lg"
+          /></a>
+          <h1 class="ml-4 text-2xl font-bold">寂深博客.青鸿映月</h1>
         </div>
-        <div>
-          <ul class="py-4">
-            <li><a href="#">首页</a></li>
-            <li><a href="#">归档</a></li>
-            <li><a href="#">关于</a></li>
-            <li><a href="#">留言板</a></li>
-            <li><a href="#">订阅</a></li>
+        <div class="flex items-center">
+          <ul class="flex items-center space-x-6">
+            <li class="px-4"><a href="#" class="font-bold">首页</a></li>
+            <li class="px-4"><a href="#" class="font-bold">建模</a></li>
+            <li class="px-4"><a href="#" class="font-bold">程序</a></li>
+            <li class="px-4"><a href="#" class="font-bold">欢迎交流</a></li>
           </ul>
+        </div>
+        <div class="ml-4">
+          <form action="/search" method="get" class="flex items-center">
+            <input
+              type="text"
+              name="q"
+              placeholder="搜索文章…"
+              class="block w-full px-4 py-2 border border-gray-300 rounded-l-md text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition"
+              autocomplete="off"
+            />
+            <button
+              type="submit"
+              class="bg-primary text-black px-4 py-2 rounded-r-md hover:bg-primary-dark"
+            >
+              搜索
+            </button>
+          </form>
         </div>
       </nav>
     </header>
+    <!-- hero section -->
+    <section class="flex justify-center items-center bg-gray-50 pt-[96px]">
+      <div class="grid grid-cols-3 gap-3 p-8 max-w-3/5">
+        <div class="col-span-2">
+          <img
+            src="img/model/白模渲染图片.jpg"
+            alt="街道白模渲染"
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <img src="img/代码背景图.png" alt="" loading="lazy" />
+        </div>
+        <div class="col-span-2">
+          <img src="img/model/未降噪.jpg" alt="室内建模图片" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/代码背景图.png" alt="" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/代码背景图.png" alt="" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/代码背景图.png" alt="" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/代码背景图.png" alt="" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center items-center w-full md:w-1/2">
+        <h1 class="text-3xl font-bold">Wlcome to Slience Deep blog</h1>
+        <p>作者：青鸿映月</p>
+        <p>始于兴趣 忠于热爱 不败与心态</p>
+      </div>
+    </section>
+    <!-- 建模部分 -->
+    <section class="bg-gray-100 flex justify-center items-center pt-[96px]">
+      <div>
+        <h1>此部分为建模部分</h1>
+      </div>
+    </section>
+    <!-- 程序部分 -->
+    <section class="bg-gray-50 flex justify-center items-center pt-[96px]">
+      <div><h1>此部分为程序部分</h1></div>
+    </section>
   </body>
 </html>
