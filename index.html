@@ -12,18 +12,24 @@
         <div class="flex items-center">
           <a href="other_pages/sliencedeep.html"
             ><img
-              src="img/logo.png"
+              src="img/other/logo.png"
               alt="logo"
               class="w-10 h-10 border-2 border-white rounded-full mr-2 shadow-lg"
           /></a>
-          <h1 class="ml-4 text-2xl font-bold">寂深博客.青鸿映月</h1>
+          <h1 class="ml-4 text-2xl font-bold text-shadow-lg">
+            寂深博客.青鸿映月
+          </h1>
         </div>
         <div class="flex items-center">
           <ul class="flex items-center space-x-6">
-            <li class="px-4"><a href="#" class="font-bold">首页</a></li>
-            <li class="px-4"><a href="#" class="font-bold">建模</a></li>
-            <li class="px-4"><a href="#" class="font-bold">程序</a></li>
-            <li class="px-4"><a href="#" class="font-bold">欢迎交流</a></li>
+            <li class="px-4"><a href="#hero" class="font-bold">首页</a></li>
+            <li class="px-4"><a href="#modeling" class="font-bold">建模</a></li>
+            <li class="px-4">
+              <a href="#programming" class="font-bold">程序</a>
+            </li>
+            <li class="px-4">
+              <a href="#contact-us" class="font-bold">欢迎交流</a>
+            </li>
           </ul>
         </div>
         <div class="ml-4">
@@ -46,8 +52,11 @@
       </nav>
     </header>
     <!-- hero section -->
-    <section class="flex justify-center items-center bg-gray-50 pt-[96px]">
-      <div class="grid grid-cols-3 gap-3 p-8 max-w-3/5">
+    <section
+      id="hero"
+      class="flex justify-center items-center bg-gray-50 pt-[96px] max-h-[80vh]"
+    >
+      <div class="grid grid-cols-3 gap-3 p-8 max-w-3/5 overflow-y-hidden">
         <div class="col-span-2">
           <img
             src="img/model/白模渲染图片.jpg"
@@ -56,39 +65,69 @@
           />
         </div>
         <div>
-          <img src="img/代码背景图.png" alt="" loading="lazy" />
+          <img src="img/model/刀向.jpg" alt="道具建模" loading="lazy" />
         </div>
         <div class="col-span-2">
           <img src="img/model/未降噪.jpg" alt="室内建模图片" loading="lazy" />
         </div>
         <div>
-          <img src="img/代码背景图.png" alt="" loading="lazy" />
+          <img src="img/model/动画线模.png" alt="键合线模" loading="lazy" />
         </div>
         <div>
-          <img src="img/代码背景图.png" alt="" loading="lazy" />
+          <img src="img/model/子机械.jpg" alt="子机械建模 " loading="lazy" />
         </div>
         <div>
-          <img src="img/代码背景图.png" alt="" loading="lazy" />
+          <img
+            src="img/model/展厅侧视设计概念图.png"
+            alt="展厅侧视设计概念图"
+            loading="lazy"
+          />
         </div>
         <div>
-          <img src="img/代码背景图.png" alt="" loading="lazy" />
+          <img src="img/model/振动筛分.png" alt="振动筛分" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/model/机械平台.jpg" alt="机械平台建模" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/model/流体模拟.png" alt="流体模拟" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/model/采茶机.png" alt="采茶机" loading="lazy" />
+        </div>
+        <div>
+          <img src="img/model/金属丝.png" alt="金属丝建模" loading="lazy" />
         </div>
       </div>
-
       <div class="flex flex-col justify-center items-center w-full md:w-1/2">
-        <h1 class="text-3xl font-bold">Wlcome to Slience Deep blog</h1>
-        <p>作者：青鸿映月</p>
-        <p>始于兴趣 忠于热爱 不败与心态</p>
+        <h1
+          class="text-3xl font-bold text-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600 animate-pulse"
+          style="background-size: 200% 200%"
+        >
+          Wlcome to Slience Deep blog
+        </h1>
+        <p class="text-1xl text-blue-800 font-bold text-shadow-2xs">
+          作者：青鸿映月
+        </p>
+        <p class="text-blue-700 font-bold text-sm text-shadow-2xs">
+          始于兴趣 忠于热爱 不败与心态
+        </p>
       </div>
     </section>
     <!-- 建模部分 -->
-    <section class="bg-gray-100 flex justify-center items-center pt-[96px]">
+    <section
+      id="modeling"
+      class="bg-gray-100 flex justify-center items-center pt-[96px]"
+    >
       <div>
         <h1>此部分为建模部分</h1>
       </div>
     </section>
     <!-- 程序部分 -->
-    <section class="bg-gray-50 flex justify-center items-center pt-[96px]">
+    <section
+      id="programming"
+      class="bg-gray-50 flex justify-center items-center pt-[96px]"
+    >
       <div><h1>此部分为程序部分</h1></div>
     </section>
   </body>
