@@ -37,22 +37,21 @@ jobs:
         run: |
           node main.js  # 执行你的脚本，生成/更新文章
 
-      # 在原有步骤中添加：
       - name: 生成 GitHub App 令牌
         uses: tibdex/github-app-token@v2
-        id: generate-token
+        id: generate-token # 定义步骤ID，用于后续引用
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      # 步骤5：提交自动更新的文件（如 index.html、生成的文章 HTML）
+      # 步骤5：提交自动更新的文件
       - name: 提交更新
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
           git commit -m "last updated at （$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
-          git push https://x-access-token:${{ secrets.APP_TOKEN }}@github.com/SilenceDeepStudio/SilenceDeepStudio.github.io.git main
+          git push https://x-access-token:${{ steps.generate-token.outputs.token }}@github.com/SilenceDeepStudio/SilenceDeepStudio.github.io.git main
 
       # 步骤6：部署到 GitHub Pages
       - name: 部署到 GitHub Pages
