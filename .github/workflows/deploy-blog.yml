@@ -40,11 +40,11 @@ jobs:
       # 步骤5：提交自动更新的文件
       - name: 提交更新
         run: |
-          git config --global user.name "SilenceDeepStudio"
-          git config --global user.email "1371330375@qq.com"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           git add .
           git commit -m "last updated at （$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
-          git push
+          git push https://${{ secrets.PAT_TOKEN }}@github.com/SilenceDeepStudio/SilenceDeepStudio.github.io.git main
 
       # 步骤6：部署到 GitHub Pages
       - name: 部署到 GitHub Pages
