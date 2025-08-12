@@ -12,7 +12,7 @@ on:
     - cron: "0 0 * * 0" # 每周日 00:00（UTC时间，北京时间+8，即周日 8:00）
 
 jobs:
-  build-and-deploy—update:
+  build-and-deploy:
     runs-on: ubuntu-latest # 使用 Ubuntu 环境
 
     steps:
