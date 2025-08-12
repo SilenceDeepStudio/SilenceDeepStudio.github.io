@@ -32,11 +32,6 @@ jobs:
           npm install  # 读取 package.json 安装依赖
         # 步骤3.5：构建 Tailwind CSS（新增）
 
-      - name: 构建 Tailwind CSS
-        run: |
-          npx tailwindcss build -i ./src/input.css -o ./src/output.css
-        # 根据你的实际路径调整
-
       # 步骤4：运行 main.js 更新文章（生成卡片和 HTML）
       - name: 运行脚本更新文章
         run: |
