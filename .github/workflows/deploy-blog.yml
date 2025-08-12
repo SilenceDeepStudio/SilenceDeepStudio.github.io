@@ -29,13 +29,21 @@ jobs:
       # 步骤3：安装依赖（jsdom、marked 等）
       - name: 安装依赖
         run: |
-          npm install  # 读取 package.json 安装依赖
-        # 步骤3.5：构建 Tailwind CSS（新增）
+          npm install  
+          # 读取 package.json 安装依赖
 
       # 步骤4：运行 main.js 更新文章（生成卡片和 HTML）
       - name: 运行脚本更新文章
         run: |
           node main.js  # 执行你的脚本，生成/更新文章
+
+      # 在原有步骤中添加：
+      - name: 生成 GitHub App 令牌
+        uses: tibdex/github-app-token@v2
+        id: generate-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       # 步骤5：提交自动更新的文件（如 index.html、生成的文章 HTML）
       - name: 提交更新
@@ -43,8 +51,8 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "自动更新文章（$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
-          git push
+          git commit -m "last updated at （$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
+          git push https://x-access-token:${{ secrets.APP_TOKEN }}@github.com/SilenceDeepStudio/SilenceDeepStudio.github.io.git main
 
       # 步骤6：部署到 GitHub Pages
       - name: 部署到 GitHub Pages
