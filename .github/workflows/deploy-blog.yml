@@ -1,13 +1,17 @@
-name: 博客自动更新与部署
+name: 博客分级更新与部署
 
 on:
-  workflow_dispatch: # 手动触发
+  push:
+    branches:
+      - main
+      - pages_display
+  workflow_dispatch:
   schedule:
-    - cron: "0 0 * * 0" # 每周日 0 点（UTC）触发
+    - cron: "0 0 * * 0"
 
 permissions:
-  contents: write # 推送分支、创建PR所需
-  pull-requests: write # 创建/合并PR所需
+  contents: write
+  pull-requests: write
   pages: write
   id-token: write
 
@@ -16,19 +20,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-update-and-deploy:
+  rapid-update:
+    if: github.ref == 'refs/heads/main' && 
+        (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+        # 新增：排除包含[skip ci]的提交
+        !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: 检出代码
+      - name: 检出main分支代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 拉取完整历史，避免合并冲突
+          ref: main
+          fetch-depth: 0
 
-      - name: 配置 Node.js
+      - name: 配置Node环境
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -36,36 +44,62 @@ jobs:
       - name: 安装依赖
         run: npm install
 
-      - name: 运行脚本更新文章
+      - name: 运行main.js生成文件
         run: node main.js
+        env:
+          UPDATE_MODE: "rapid"
 
-      - name: 提交更新到 pages_display 分支（彻底解决未提交修改问题）
+      - name: 提交自动生成的文件
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-
-          # 确保切换到 pages_display 分支，不存在则创建
-          if ! git checkout pages_display; then
-            git checkout -b pages_display
-          fi
-
-          # 关键步骤：暂存所有未提交的修改（包括新增/修改文件）
-          git stash save "临时暂存工作流生成的修改" || echo "没有需要暂存的修改"
-
-          # 拉取远程最新内容（此时工作区已干净，可正常rebase）
-          git pull origin pages_display --rebase
-
-          # 恢复暂存的修改（将脚本生成的内容与远程拉取的内容合并）
-          git stash pop || echo "没有需要恢复的暂存内容"
-
-          # 提交所有修改（包括恢复的暂存内容和远程拉取的内容）
           git add .
-          git commit -m "last update: （$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
+          # 关键：同时添加[bot]和[skip ci]标记
+          git commit -m "[bot] [skip ci] Rapid updates: $(date +'%Y-%m-%d')" || echo "无新内容需要更新"
+          git push origin main
 
-          # 推送至远程 pages_display 分支
+      - name: 部署到GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source: .
+
+  delayed-update:
+    if: (github.ref == 'refs/heads/pages_display' && github.event_name == 'push') ||
+        github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出pages_display分支
+        uses: actions/checkout@v4
+        with:
+          ref: pages_display
+          fetch-depth: 0
+
+      - name: 配置Node环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 安装依赖
+        run: npm install
+
+      - name: 运行main.js生成文件
+        run: node main.js
+        env:
+          UPDATE_MODE: "delayed"
+
+      - name: 提交到pages_display分支
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          # 同样添加双标记
+          git commit -m "[bot] [skip ci] on time update: $(date +'%Y-%m-%d')" || echo "无新内容需要更新"
           git push origin pages_display
 
-      - name: 安装并配置 GitHub CLI
+      # 其余步骤保持不变...
+      - name: 安装GitHub CLI
         run: |
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/etc/apt/trusted.gpg.d/githubcli.gpg
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/githubcli.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
@@ -74,34 +108,44 @@ jobs:
           gh auth setup-git
           gh config set auth.token ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 创建 PR（pages_display → main）
+      - name: 创建PR（pages_display → main）
         run: |
-          gh pr create \
-            --title "自动更新：$(date +'%Y-%m-%d') 内容合并" \
-            --body "由 GitHub Actions 自动提交，包含手动文章和自动更新内容" \
-            --base main \
-            --head pages_display
+          if ! gh pr list --base main --head pages_display --state open | grep -q .; then
+            gh pr create \
+              --title "[bot] 等待更新合并：$(date +'%Y-%m-%d')" \
+              --body "由等待模式自动提交，包含累积的文章更新" \
+              --base main \
+              --head pages_display
+          fi
 
-      - name: 自动合并 PR 到 main 分支（部署源）
+      - name: 自动合并PR（如无冲突）
         run: |
-          gh pr merge pages_display \
-            --auto \
-            --delete-branch \ # 合并后删除临时分支，保持仓库整洁
-            --merge
+          if gh pr checks pages_display --watch; then
+            gh pr merge pages_display --auto --merge
+          else
+            echo "PR存在冲突，已跳过自动合并，请手动处理"
+          fi
 
-      # 以下是官方 Pages 部署流程（明确基于 main 分支）
-      - name: 配置 Pages（指定 main 分支为源）
-        uses: actions/configure-pages@v5
-        with:
-          # 明确指定 GitHub Pages 的源分支为 main
-          # 若后续需修改，可在此处调整（如改为其他分支）
-          source: main
+  post-merge-deploy:
+    needs: delayed-update
+    if: github.event_name == 'schedule' || (github.event.pull_request && github.event.pull_request.merged == true)
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 步骤保持不变...
+      - name: 提交合并后的更新
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          # 合并后的提交也添加双标记
+          git commit -m "[bot] [skip ci] last update: $(date +'%Y-%m-%d')" || echo "无内容需要更新"
+          git push origin main
 
-      - name: 上传 main 分支的部署文件
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "." # 上传 main 分支的所有内容（已合并手动+自动更新）
-
-      - name: 部署到 GitHub Pages（基于 main 分支）
-        id: deployment
+      - name: 部署到GitHub Pages
         uses: actions/deploy-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source: .
