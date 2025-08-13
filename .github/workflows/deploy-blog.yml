@@ -1,55 +1,95 @@
 name: 博客自动更新与部署
 
-# 触发条件：
-# 1. 手动触发（方便紧急更新）
-# 2. 推送到 main 分支时触发（提交新文章后自动更新）
-# 3. 每周日 0 点自动更新（定时任务）
 on:
   workflow_dispatch: # 手动触发
-  push:
-    branches: ["main"] # 推送到 main 分支时
   schedule:
-    - cron: "0 0 * * 0" # 每周日 00:00（UTC时间，北京时间+8，即周日 8:00）
+    - cron: "0 0 * * 0" # 每周日 0 点（UTC）触发
+
+permissions:
+  contents: write # 推送分支、创建PR所需
+  pull-requests: write # 创建/合并PR所需
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest # 使用 Ubuntu 环境
+  build-update-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
 
     steps:
-      # 步骤1：拉取仓库代码
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 拉取完整历史，避免合并冲突
 
-      # 步骤2：设置 Node.js 环境（运行 main.js 需要）
       - name: 配置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # 使用 Node.js 20 版本（兼容你的脚本）
+          node-version: 20
 
-      # 步骤3：安装依赖（jsdom、marked 等）
       - name: 安装依赖
-        run: |
-          npm install  
-          # 读取 package.json 安装依赖
+        run: npm install
 
-      # 步骤4：运行 main.js 更新文章（生成卡片和 HTML）
       - name: 运行脚本更新文章
-        run: |
-          node main.js  # 执行你的脚本，生成/更新文章
+        run: node main.js
 
-      # 步骤5：提交自动更新的文件
-      - name: 提交更新
+      - name: 提交更新到 pages_display 分支（保留手动提交部分）
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          # 确保切换到 pages_display 分支，不存在则创建
+          git checkout -b pages_display || git checkout pages_display
+          # 拉取远程最新内容，避免覆盖手动提交！
+          git pull origin pages_display --rebase
+          # 添加并提交更新
           git add .
-          git commit -m "last updated at （$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
-          git push https://${{ secrets.PAT_TOKEN }}@github.com/SilenceDeepStudio/SilenceDeepStudio.github.io.git main
+          git commit -m "last update: （$(date +'%Y-%m-%d')）" || echo "无内容需要更新"
+          # 正常推送，确保手动提交不丢失
+          git push origin pages_display
 
-      # 步骤6：部署到 GitHub Pages
-      - name: 部署到 GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: 安装并配置 GitHub CLI
+        run: |
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/etc/apt/trusted.gpg.d/githubcli.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/githubcli.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh -y
+          gh auth setup-git
+          gh config set auth.token ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 创建 PR（pages_display → main）
+        run: |
+          gh pr create \
+            --title "自动更新：$(date +'%Y-%m-%d') 内容合并" \
+            --body "由 GitHub Actions 自动提交，包含手动文章和自动更新内容" \
+            --base main \
+            --head pages_display
+
+      - name: 自动合并 PR 到 main 分支（部署源）
+        run: |
+          gh pr merge pages_display \
+            --auto \
+            --delete-branch \ # 合并后删除临时分支，保持仓库整洁
+            --merge
+
+      # 以下是官方 Pages 部署流程（明确基于 main 分支）
+      - name: 配置 Pages（指定 main 分支为源）
+        uses: actions/configure-pages@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 自动生成的 Token，无需手动配置
-          publish_branch: gh-pages # 部署到 gh-pages 分支（GitHub Pages 默认读取此分支）
-          publish_dir: . # 部署根目录下的所有文件（包括 index.html 和文章 HTML）
+          # 明确指定 GitHub Pages 的源分支为 main
+          # 若后续需修改，可在此处调整（如改为其他分支）
+          source: main
+
+      - name: 上传 main 分支的部署文件
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "." # 上传 main 分支的所有内容（已合并手动+自动更新）
+
+      - name: 部署到 GitHub Pages（基于 main 分支）
+        id: deployment
+        uses: actions/deploy-pages@v4
