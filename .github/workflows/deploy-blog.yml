@@ -21,10 +21,9 @@ concurrency:
 
 jobs:
   rapid-update:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&!(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]'))
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: 检出main分支代码
@@ -51,18 +50,21 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          # 关键：同时添加[bot]和[skip ci]标记
           git commit -m "[bot] [skip ci] Rapid updates: $(date +'%Y-%m-%d')" || echo "无新内容需要更新"
           git push origin main
 
-      - name: Checkout
+      # 重新拉取 main 最新内容
+      - name: 重新检出main分支最新内容
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: "."
       - name: Deploy to GitHub Pages
         id: deployment
@@ -99,11 +101,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          # 同样添加双标记
           git commit -m "[bot] [skip ci] on time update: $(date +'%Y-%m-%d')" || echo "无新内容需要更新"
           git push origin pages_display
 
-      # 其余步骤保持不变...
       - name: 安装GitHub CLI
         run: |
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/etc/apt/trusted.gpg.d/githubcli.gpg
@@ -123,40 +123,39 @@ jobs:
               --head pages_display
           fi
 
-      - name: 自动合并PR（如无冲突）
+      - name: 自动合并PR
         run: |
           if gh pr checks pages_display --watch; then
             gh pr merge pages_display --auto --merge
           else
             echo "PR存在冲突，已跳过自动合并，请手动处理"
-          fi
 
   post-merge-deploy:
     needs: delayed-update
     if: github.event_name == 'schedule' || (github.event.pull_request && github.event.pull_request.merged == true)
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # 步骤保持不变...
+      - name: 重新检出main分支最新内容
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
       - name: 提交合并后的更新
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          # 合并后的提交也添加双标记
           git commit -m "[bot] [skip ci] last update: $(date +'%Y-%m-%d')" || echo "无内容需要更新"
           git push origin main
 
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: "."
       - name: Deploy to GitHub Pages
         id: deployment
