@@ -55,11 +55,18 @@ jobs:
           git commit -m "[bot] [skip ci] Rapid updates: $(date +'%Y-%m-%d')" || echo "无新内容需要更新"
           git push origin main
 
-      - name: 部署到GitHub Pages
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source: .
+          # Upload entire repository
+          path: "."
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   delayed-update:
     if:
@@ -142,8 +149,15 @@ jobs:
           git commit -m "[bot] [skip ci] last update: $(date +'%Y-%m-%d')" || echo "无内容需要更新"
           git push origin main
 
-      - name: 部署到GitHub Pages
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source: .
+          # Upload entire repository
+          path: "."
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
