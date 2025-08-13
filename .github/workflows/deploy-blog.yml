@@ -45,6 +45,9 @@ jobs:
           git config --global user.email "actions@github.com"
           # 确保切换到 pages_display 分支，不存在则创建
           git checkout -b pages_display || git checkout pages_display
+          # 关键：先暂存并提交本地所有修改（避免 pull 时冲突）
+          git add .
+          git commit -m "临时提交：（$(date +'%Y-%m-%d')）" || echo "无未提交修改"
           # 拉取远程最新内容，避免覆盖手动提交！
           git pull origin pages_display --rebase
           # 添加并提交更新
