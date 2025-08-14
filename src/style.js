@@ -31,3 +31,15 @@ function hideText() {
 fadeText.classList.add("opacity-0");
 // 启动动画
 showText();
+
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+const closeMobileMenu = document.getElementById("closeMobileMenu");
+mobileMenuBtn.addEventListener("click", () => {
+  mobileMenu.classList.remove("opacity-0", "invisible");
+  mobileMenu.classList.add("opacity-100", "visible");
+});
+closeMobileMenu.addEventListener("click", () => {
+  mobileMenu.classList.remove("opacity-100", "visible");
+  mobileMenu.classList.add("opacity-0", "invisible");
+});

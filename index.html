@@ -14,7 +14,8 @@
             寂深博客.青泓栖月
           </h1>
         </div>
-        <div class="flex items-center">
+        <!-- Desktop nav -->
+        <div class="hidden md:flex items-center">
           <ul class="flex items-center space-x-6">
             <li class="px-4"><a href="#hero" class="font-bold">首页</a></li>
             <li class="px-4">
@@ -28,7 +29,7 @@
             </li>
           </ul>
         </div>
-        <div class="ml-4">
+        <div class="ml-4 hidden md:flex">
           <form action="/search" method="get" class="flex items-center">
             <input type="text" name="q" placeholder="搜索文章…" class="block w-full px-4 py-2 border border-gray-300 rounded-l-md text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition" autocomplete="off">
             <button type="submit" class="bg-primary text-black px-4 py-2 rounded-r-md hover:bg-primary-dark">
@@ -36,13 +37,47 @@
             </button>
           </form>
         </div>
+        <!-- Hamburger for mobile -->
+        <div class="md:hidden flex items-center">
+          <button id="mobileMenuBtn" class="focus:outline-none">
+            <svg class="w-8 h-8 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
       </nav>
+      <!-- Mobile menu -->
+      <div id="mobileMenu" class="fixed top-0 left-0 w-full h-full bg-white bg-opacity-95 z-50 flex flex-col items-center justify-start pt-24 px-8 transition-all duration-300 opacity-0 invisible">
+        <button id="closeMobileMenu" class="absolute top-6 right-6 text-gray-800 text-3xl focus:outline-none">
+          ×
+        </button>
+        <ul class="flex flex-col space-y-6 w-full text-center mb-8">
+          <li><a href="#hero" class="font-bold text-xl block py-2">首页</a></li>
+          <li>
+            <a href="#modeling" class="font-bold text-xl block py-2">建模</a>
+          </li>
+          <li>
+            <a href="#programming" class="font-bold text-xl block py-2">程序</a>
+          </li>
+          <li>
+            <a href="#contact-us" class="font-bold text-xl block py-2">欢迎交流</a>
+          </li>
+        </ul>
+        <form action="/search" method="get" class="flex flex-col items-center w-full">
+          <input type="text" name="q" placeholder="搜索文章…" class="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-900 mb-4 focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition" autocomplete="off">
+          <button type="submit" class="bg-primary text-black px-4 py-2 rounded-md hover:bg-primary-dark w-full">
+            搜索
+          </button>
+        </form>
+      </div>
     </header>
     <!-- hero section -->
-    <section id="hero" class="flex justify-center items-center bg-shadow-lg bg-gray-50 pt-[96px] overflow-hidden">
-      <div class="relative w-full my-7 md:w-3/5 h-[60vh] md:h-[70vh] overflow-hidden">
+    <section id="hero" class="flex flex-col md:flex-row justify-center items-center bg-shadow-lg bg-gray-50 pt-[96px] overflow-hidden h-[50vh] md:h-auto">
+      <!-- 图片部分，仅在中等及以上设备显示 -->
+      <div class="relative w-full my-7 md:w-3/5 h-[60vh] md:h-[70vh] overflow-hidden hidden md:block">
         <div id="imageScroller" class="absolute w-full h-auto animate-scroll">
           <div class="grid grid-cols-3 gap-3 p-4 md:p-8">
+            <!-- ...图片内容保持不变... -->
             <div class="col-span-2 overflow-hidden rounded-md shadow-lg">
               <img src="img/model/白模渲染图片.jpg" alt="街道白模渲染" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
             </div>
@@ -112,11 +147,12 @@
         <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-gray-50 to-transparent z-10"></div>
         <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50 to-transparent z-10"></div>
       </div>
-      <div class="flex flex-col justify-center items-center w-full md:w-1/2">
-        <h1 class="text-3xl font-bold text-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-800" style="background-size: 200% 200%">
-          Wlcome to Slience Deep blog
+      <!-- 欢迎部分，始终显示 -->
+      <div class="flex flex-col justify-center items-center w-full md:w-1/2 px-4 py-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-800" style="background-size: 200% 200%">
+          Welcome to Slience Deep blog
         </h1>
-        <p class="text-1xl text-gray-500 font-bold text-shadow-2xs">
+        <p class="text-lg md:text-1xl text-gray-500 font-bold text-shadow-2xs">
           作者：青泓栖月
         </p>
         <p id="fadeText" class="text-gray-400 font-bold text-sm text-shadow-2xs opacity-100 transition-opacity duration-1000">
@@ -151,7 +187,7 @@
     <section id="modeling" class="bg-gray-100 pt-[106px]">
       <div>
         <h1 class="text-3xl font-bold text-shadow-lg mx-20">
-          此部分为建模部分
+          嘿！喜欢建模吗？泥瓦匠！
         </h1>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-20 py-8"></div>
@@ -160,14 +196,14 @@
     <section id="programming" class="bg-gray-50 pt-[106px]">
       <div>
         <h1 class="text-3xl font-bold text-shadow-lg mx-20">
-          此部分为程序部分
+          优雅coding，高效翻车！
         </h1>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-20 py-8"><a href="article/TOOL/如何高效使用GitHub/GitHub使用方法.html">
           <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
             <h2 class="text-xl font-bold mb-2">如何高效使用 GitHub</h2>
             <p class="text-gray-600 mb-4">分类: TOOL</p>
-            <p class="text-gray-400">更新日期: 2025/8/13</p>
+            <p class="text-gray-400">更新日期: 2025/8/12</p>
           </div>
         </a></div>
     </section>

@@ -45,47 +45,100 @@ async function convertMdToHtml(mdPath) {
 
     // 3. 生成完整HTML文件（带基础样式和返回首页链接）
     const fullHtml = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${mdFileName}</title>
-  <style>
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      color: #333;
-    }
-    h1, h2, h3 { color: #222; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-    pre { 
-      background: #f5f5f5; 
-      padding: 1rem; 
-      border-radius: 4px; 
-      overflow-x: auto;
-    }
-    code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 3px; }
-    a { color: #007bff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .back-link { margin-bottom: 2rem; display: inline-block; }
-    /* 图片自适应 */
-    img { max-width: 100%; height: auto; border-radius: 4px; }
-  </style>
-</head>
-<body>
-  <div class="back-link">
-    <a href="${path
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${mdFileName}</title>
+     <style>
+      body {
+        background: linear-gradient(
+          90deg,
+          #e0f2ff 0%,
+          #f8fafc 40%,
+          #f8fafc 60%,
+          #e0f2ff 100%
+        );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #333;
+      }
+      h1 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        text-align: center;
+        font-size: 2.5rem;
+      }
+      h2,
+      h3 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      code {
+        font-size: 1rem;
+        background: #f5f5f5;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+      }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .back-link {
+        margin-bottom: 2rem;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.12);
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #38c6ff 0%, #4f8cff 100%);
+        box-shadow: 0 4px 16px rgba(56, 198, 255, 0.18);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+    </style>
+    </head>
+    <body>
+    <div class="back-link">
+    <a class="back-btn" href="${path
       .relative(mdDir, HTML_FILE)
       .replace(/\\/g, "/")}">← 返回首页</a>
-  </div>
-  <article>
+    </div>
+    <article>
     ${htmlContent}
-  </article>
-</body>
-</html>
+    </article>
+    </body>
+    </html>
     `.trim();
 
     await fs.writeFile(outputPath, fullHtml);

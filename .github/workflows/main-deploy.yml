@@ -1,0 +1,80 @@
+name: Main Deploy Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: "0 0 * * 0" # 每周日00:00
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    if: |
+      (github.event_name == 'pull_request' && github.actor != 'github-actions[bot]') ||
+      (github.event_name == 'schedule')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Check if 7 weeks have passed (for schedule only)
+        if: github.event_name == 'schedule'
+        id: check-time
+        run: |
+          LAST_UPDATE_FILE="last_update.txt"
+          CURRENT_TIME=$(date +%s)
+          SKIP=true
+          if [ -f "$LAST_UPDATE_FILE" ]; then
+            LAST_TIME=$(cat $LAST_UPDATE_FILE)
+            DIFF_DAYS=$(( (CURRENT_TIME - LAST_TIME) / 86400 ))
+            if [ $DIFF_DAYS -ge 49 ]; then
+              SKIP=false
+            fi
+          else
+            SKIP=false  # 首次运行不跳过
+          fi
+          if [ "$SKIP" = false ]; then
+            echo $CURRENT_TIME > $LAST_UPDATE_FILE
+            git add $LAST_UPDATE_FILE
+            git commit -m "Update last_update timestamp at $(date +%Y-%m-%d %H:%M:%S)" || echo "No change"
+            git push origin main
+          fi
+          echo "skip=$SKIP" >> $GITHUB_OUTPUT
+
+      - name: Skip if not needed
+        if: steps.check-time.outputs.skip == 'true'
+        run: exit 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run main.js to update MD to HTML and index.html
+        run: node main.js # 在根目录执行
+
+      - name: Commit and push updates to main
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Auto-deploy updates on main at $(date +%Y-%m-%d %H:%M:%S)"
+            git push origin main
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ # 根目录部署
+          force_orphan: true
