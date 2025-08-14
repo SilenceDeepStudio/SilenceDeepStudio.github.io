@@ -14,14 +14,6 @@ jobs:
         with:
           ref: update
 
-      - name: Sync with main (to avoid conflicts)
-        run: |
-          git fetch origin
-          git checkout update
-          git pull origin main --rebase
-          git push origin update
-        continue-on-error: true # 如果rebase冲突，继续但日志警告
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -31,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Run main.js to update MD to HTML and index.html
-        run: node main.js # 在根目录执行，更新根目录的index.html
+        run: node main.js
 
       - name: Commit changes if any
         run: |
