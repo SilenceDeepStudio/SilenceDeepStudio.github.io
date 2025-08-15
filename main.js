@@ -51,7 +51,7 @@ async function convertMdToHtml(mdPath) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${mdFileName}</title>
-     <style>
+    <style>
       body {
         background: linear-gradient(
           90deg,
@@ -80,6 +80,9 @@ async function convertMdToHtml(mdPath) {
         color: #222;
         border-bottom: 1px solid #eee;
         padding-bottom: 0.5rem;
+      }
+      p {
+        text-indent: 2em; /* 首行缩进2字符 */
       }
       pre {
         background: #f5f5f5;
@@ -125,6 +128,8 @@ async function convertMdToHtml(mdPath) {
         max-width: 100%;
         height: auto;
         border-radius: 4px;
+        display: block;
+        margin: 0 auto; /* 图片居中 */
       }
     </style>
     </head>
@@ -171,8 +176,21 @@ async function parseMarkdown(filePath) {
     const parentFolder = path.basename(path.dirname(path.dirname(filePath)));
 
     // 获取创建时间
-    const stats = await fs.stat(filePath);
-    const updateDate = new Date(stats.birthtime).toLocaleDateString("zh-CN"); //更新为创建时间
+    let updateDate;
+    // 使用git log获取文件创建时间
+    const { execSync } = require("child_process");
+    try {
+      const gitCmd = `git log --diff-filter=A --format=%ct -- "${filePath}"`;
+      const output = execSync(gitCmd).toString().trim();
+      if (!output) throw new Error("No git log output");
+      const creationTimestamp = parseInt(output) * 1000;
+      if (isNaN(creationTimestamp)) throw new Error("Invalid timestamp");
+      updateDate = new Date(creationTimestamp).toLocaleDateString("zh-CN");
+    } catch (error) {
+      console.error(`获取创建时间失败 ${path.basename(filePath)}:`, error);
+      const stats = await fs.stat(filePath);
+      updateDate = new Date(stats.mtime).toLocaleDateString("zh-CN");
+    }
 
     // 转换为HTML并获取访问路径
     const htmlFilePath = await convertMdToHtml(filePath);
