@@ -170,9 +170,9 @@ async function parseMarkdown(filePath) {
     // 提取分类文件夹
     const parentFolder = path.basename(path.dirname(path.dirname(filePath)));
 
-    // 获取更新时间
+    // 获取创建时间
     const stats = await fs.stat(filePath);
-    const updateDate = new Date(stats.mtime).toLocaleDateString("zh-CN");
+    const updateDate = new Date(stats.birthtime).toLocaleDateString("zh-CN");
 
     // 转换为HTML并获取访问路径
     const htmlFilePath = await convertMdToHtml(filePath);
