@@ -172,7 +172,7 @@ async function parseMarkdown(filePath) {
 
     // 获取创建时间
     const stats = await fs.stat(filePath);
-    const updateDate = new Date(stats.birthtime).toLocaleDateString("zh-CN");
+    const updateDate = new Date(stats.birthtime).toLocaleDateString("zh-CN"); //更新为创建时间
 
     // 转换为HTML并获取访问路径
     const htmlFilePath = await convertMdToHtml(filePath);
