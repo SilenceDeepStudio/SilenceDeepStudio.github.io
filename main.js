@@ -11,7 +11,7 @@ const CATEGORY_MOD_ID = "modeling"; // 建模分类section ID
 
 // 分类映射表
 const CATEGORY_MAP = {
-  [CATEGORY_PRO_ID]: ["HTML_", "PYTHON", "C#", "STM32", "TOOL"],
+  [CATEGORY_PRO_ID]: ["HTML_", "PYTHON", "Cscript", "STM32", "TOOL"],
   [CATEGORY_MOD_ID]: [
     "3DMAX",
     "Blender",
