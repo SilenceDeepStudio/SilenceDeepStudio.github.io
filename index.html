@@ -51,74 +51,34 @@
       </nav>
       <!-- Mobile menu -->
 
-      <div
-        id="mobileMenu"
-        class="fixed inset-0 bg-white backdrop-blur-sm z-50 flex flex-col items-center justify-start pt-24 px-8 transition-all duration-300 opacity-0 invisible transform translate-y-4"
-      >
-        <button
-          id="closeMobileMenu"
-          class="absolute top-6 right-6 text-gray-800 text-3xl hover:text-primary transition-colors focus:outline-none"
-          aria-label="关闭菜单"
-        >
+      <div id="mobileMenu" class="fixed inset-0 bg-white backdrop-blur-sm z-50 flex flex-col items-center justify-start pt-24 px-8 transition-all duration-300 opacity-0 invisible transform translate-y-4">
+        <button id="closeMobileMenu" class="absolute top-6 right-6 text-gray-800 text-3xl hover:text-primary transition-colors focus:outline-none" aria-label="关闭菜单">
           ×
         </button>
-        <ul
-          class="flex flex-col space-y-6 w-full text-center mb-8"
-          role="navigation"
-          aria-label="移动端导航"
-        >
+        <ul class="flex flex-col space-y-6 w-full text-center mb-8" role="navigation" aria-label="移动端导航">
           <li>
-            <a
-              href="#hero"
-              class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
-              >首页</a
-            >
+            <a href="#hero" class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full">首页</a>
           </li>
           <li>
-            <a
-              href="#modeling"
-              class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
-              >建模</a
-            >
+            <a href="#modeling" class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full">建模</a>
           </li>
           <li>
-            <a
-              href="#programming"
-              class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
-              >程序</a
-            >
+            <a href="#programming" class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full">程序</a>
           </li>
           <li>
-            <a
-              href="#contact-us"
-              class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
-              >欢迎交流</a
-            >
+            <a href="#contact-us" class="font-bold text-xl block py-2 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full">欢迎交流</a>
           </li>
         </ul>
-        <form
-          action="/search"
-          method="get"
-          class="flex flex-col items-center w-full max-w-md mx-auto"
-        >
+        <form action="/search" method="get" class="flex flex-col items-center w-full max-w-md mx-auto">
           <div class="relative w-full mb-4">
-            <input
-              type="text"
-              name="q"
-              placeholder="搜索文章…"
-              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition shadow-sm"
-              autocomplete="off"
-            />
+            <input type="text" name="q" placeholder="搜索文章…" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition shadow-sm" autocomplete="off">
           </div>
-          <button
-            type="submit"
-            class="bg-primary text-black px-6 py-3 rounded-lg hover:bg-primary-dark w-full font-medium transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-md"
-          >
+          <button type="submit" class="bg-primary text-black px-6 py-3 rounded-lg hover:bg-primary-dark w-full font-medium transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-md">
             搜索
           </button>
         </form>
       </div>
-    </div></header>
+    </header>
     <!-- hero section -->
     <section id="hero" class="flex flex-col md:flex-row justify-center items-center bg-shadow-lg bg-gray-50 pt-[96px] overflow-hidden h-[50vh] md:h-auto">
       <!-- 图片部分，仅在中等及以上设备显示 -->
