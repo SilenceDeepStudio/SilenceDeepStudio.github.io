@@ -35,11 +35,32 @@ showText();
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 const mobileMenu = document.getElementById("mobileMenu");
 const closeMobileMenu = document.getElementById("closeMobileMenu");
-mobileMenuBtn.addEventListener("click", () => {
-  mobileMenu.classList.remove("opacity-0", "invisible");
-  mobileMenu.classList.add("opacity-100", "visible");
+
+// 打开菜单
+function openMenu() {
+  mobileMenu.classList.remove("opacity-0", "invisible", "translate-y-4");
+  mobileMenu.classList.add("opacity-100", "visible", "translate-y-0");
+  document.body.style.overflow = "hidden"; // 防止背景滚动
+}
+
+// 关闭菜单
+function closeMenu() {
+  mobileMenu.classList.remove("opacity-100", "visible", "translate-y-0");
+  mobileMenu.classList.add("opacity-0", "invisible", "translate-y-4");
+  document.body.style.overflow = "auto"; // 恢复背景滚动
+}
+
+mobileMenuBtn.addEventListener("click", openMenu);
+closeMobileMenu.addEventListener("click", closeMenu);
+
+// 点击菜单外部关闭菜单
+mobileMenu.addEventListener("click", (e) => {
+  if (e.target === mobileMenu) closeMenu();
 });
-closeMobileMenu.addEventListener("click", () => {
-  mobileMenu.classList.remove("opacity-100", "visible");
-  mobileMenu.classList.add("opacity-0", "invisible");
+
+// ESC键关闭菜单
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !mobileMenu.classList.contains("invisible")) {
+    closeMenu();
+  }
 });
