@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常规css样式</title>
+    <style>
+      body {
+        background: linear-gradient(
+          90deg,
+          #e0f2ff 0%,
+          #f8fafc 40%,
+          #f8fafc 60%,
+          #e0f2ff 100%
+        );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #333;
+      }
+      h1 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        text-align: center;
+        font-size: 2.5rem;
+      }
+      h2,
+      h3 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      p {
+        text-indent: 2em; /* 首行缩进2字符 */
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      code {
+        font-size: 1rem;
+        background: #f5f5f5;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+      }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .back-link {
+        margin-bottom: 2rem;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.12);
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #38c6ff 0%, #4f8cff 100%);
+        box-shadow: 0 4px 16px rgba(56, 198, 255, 0.18);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto; /* 图片居中 */
+      }
+    </style>
+    </head>
+    <body>
+    <div class="back-link">
+    <a class="back-btn" href="../../../index.html">← 返回首页</a>
+    </div>
+    <article>
+    <h1>常规 css 样式</h1>
+<p><strong>在阅读本片文档之前请熟知，你不能靠本篇文章就完全明白如何使用和明白各各属性和其值，你必须通过自己的实践配合来不断提升自己的经验，才能更好的掌握 css 样式。</strong></p>
+<p>之前我们已经大概了解了 HTML 这种标签语言，但是当我们直接书写网页时往往会看到以下情况：</p>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;style&gt;
+    p {
+      color: blue;
+      font-size: 16px;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;这是一个段落&lt;/p&gt;
+&lt;/body&gt;
+</code></pre>
+<p>结果如下：</p>
+<pre><code>这是一个段落
+</code></pre>
+<p>这明显不是我们想要的效果，他只能是一个段落，没有装饰，想一想是否真的在哪里见过这样的网页呢？在我们浏览网页时偶尔会出现这样的问题，如下图：</p>
+<img src="image.png" alt="1.png" width="400">
+
+<p>没有任何样式，可阅读性差。那么我们该如何解决这个问题呢？</p>
+<h2>了解 CSS 样式</h2>
+<p>css 是一种用于美化 HTML 和 XML 文档的样式表语言。他能控制网页的布局、字体、颜色、背景、视觉效果。纯 CSS 指代的是使用原生的 CSS 特性，不依赖第三方框架和预处理器！</p>
+<p>废话不多说，我们来介绍一下把一段标记性语言添加样式的方法。</p>
+<h3>内联样式</h3>
+<p>这种方法指代的是直接把样式写在标签内部，例如：</p>
+<pre><code class="language-html">&lt;p style=&quot;color: red; font-size: 16px;&quot;&gt;这是一个段落&lt;/p&gt;
+</code></pre>
+<p>我们就可以看到如下效果：</p>
+<p style="color: red; font-size: 16px;">这是一个段落</p>
+
+<p>这样的话我们就已经使用了一些 css 样式，但是内联样式的问题是他只能作用于当前的标签，不能作用于其他的标签，所以我们一般不使用内联样式。也不建议使用，因为代码难以维护</p>
+<h3>内部样式表</h3>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;style&gt;
+    p {
+      color: red;
+      font-size: 16px;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;这是一个段落&lt;/p&gt;
+&lt;/body&gt;
+</code></pre>
+<p>效果如下</p>
+<p><img src="image-1.png" alt="alt text"></p>
+<p>可以看到我们在 head 的标签内开启了一个 style 的标签，这个标签内的内容就是 css 的样式，我们可以在这个标签内书写 css 的样式，这样的话我们就可以把 css 的样式作用于所有的 p 标签。请注意是所有的 P 标签内的文字都被作用了。</p>
+<h3>外部样式表</h3>
+<p>外部样式表是指把 css 的样式写在一个外部的文件中，然后在 html 中引用这个文件。例如：</p>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;这是一个段落&lt;/p&gt;
+&lt;/body&gt;
+</code></pre>
+<p>我们可以在 style.css 中书写 css 的样式，例如：</p>
+<pre><code class="language-css">p {
+  color: red;
+  font-size: 16px;
+}
+</code></pre>
+<p>效果如下</p>
+<p><img src="image-1.png" alt="alt text"></p>
+<p>可以看到我们成功的把 css 的样式作用于了 p 标签。这种方式是我们最常用的方式，也是最推荐的方式。因为易于维护和复用，什么是复用呢？</p>
+<p><strong>复用</strong>指的是我们可以在多个 html 文件中引用同一个 css 文件，这样的话我们就可以在多个 html 文件中使用同一个 css 文件的样式，而不需要在每个 html 文件中都书写一遍 css 样式。</p>
+<h2>常用 CSS 语法</h2>
+<p>CSS 规则通常由选择器和声明块组成。选择器指定要应用样式的元素，声明块包含一个或多个声明，每个声明由属性和值组成。</p>
+<pre><code class="language-css">selector {
+  property: value;
+  property: value;
+  ...;
+}
+</code></pre>
+<p>进行解释</p>
+<p><strong>选择器</strong>：选择器指定要应用样式的元素。</p>
+<p><strong>声明块</strong>：声明块包含一个或多个声明，每个声明由属性和值组成。其实就是<code>{}</code>内的内容</p>
+<p><strong>属性</strong>：属性指定要应用的样式的名称。</p>
+<p><strong>值</strong>：值指定属性的具体样式。</p>
+<h3>选择器</h3>
+<ul>
+<li><p>标签选择器：p, div, h1</p>
+</li>
+<li><p>类选择器：.classname</p>
+</li>
+<li><p>ID 选择器：#idname 你可以在标签内定制 id 例如<code>&lt;div id=&quot;idname&quot;&gt;</code></p>
+</li>
+<li><p>通用选择器：*（选择所有元素）</p>
+</li>
+<li><p>后代选择器：div p（选择 div 内的所有 p）</p>
+</li>
+<li><p>子选择器：div &gt; p（选择 div 的直接子元素 p）</p>
+</li>
+<li><p>伪类选择器：:hover, :active, :first-child</p>
+<ul>
+<li>什么是伪类选择器？
+伪类选择器是指在选择器的基础上添加一些特殊的状态或行为，用于选择满足特定条件的元素。
+:hover 鼠标悬停在元素上时触发
+:active 元素被激活时触发
+:first-child 选择元素的第一个子元素</li>
+</ul>
+</li>
+<li><p>伪元素选择器：::before, ::after</p>
+<ul>
+<li>什么是伪元素选择器？
+伪元素选择器是指在选择器的基础上添加一些特殊的状态或行为，用于选择满足特定条件的元素。
+::before 选择元素的第一个子元素
+::after 选择元素的最后一个子元素</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-css">/_ 类选择器 _/ .intro {
+  font-weight: bold;
+}
+
+/_ ID 选择器 _/ #unique {
+  background-color: yellow;
+}
+
+/_ 伪类选择器 _/ a:hover {
+  color: green;
+}
+
+/_ 伪元素选择器 _/ p::first-line {
+  color: blue;
+}
+</code></pre>
+<h3>核心属性</h3>
+<ol>
+<li><p>文本与字体</p>
+<p><code>color</code>：文本颜色 #FF0000、red、rgb(255, 0, 0)</p>
+<p><code>font-size</code>：字体大小（如 16px、1rem、2em）</p>
+<p><code>font-family</code>：字体（如&quot;Arial&quot;, sans-serif）</p>
+<p><code>font-weight</code>：字体粗细（如 normal、bold、700）</p>
+<p><code>text-align</code>：文本对齐（left、center、right、justify）</p>
+<p><code>line-height</code>：行高（如 1.5、20px）</p>
+<p><code>text-decoration</code>：文本装饰（如 underline、none）</p>
+</li>
+<li><p>盒模型
+CSS 盒模型是布局的基础，包括：</p>
+<p>内容（<code>Content</code>）：元素的内容区域（宽高由 width 和 height 控制）</p>
+<p>内边距（<code>Padding</code>）：内容与边框之间的空间</p>
+<p>边框（<code>Border</code>）：围绕内边距的线</p>
+<p>外边距（<code>Margin</code>）：边框外的空间</p>
+<p>这太不好理解了，但是好在浏览器已经为我们解释了，我们可以在浏览器中查看元素的盒模型，例如：</p>
+<img src="image-2.png" alt="盒模型" width="800px" />
+可以看到浏览器其实内置了这些调整功能以供我们进行调试。
+
+<p>相关属性：</p>
+<p><code>width</code>、<code>height</code>：内容区域的宽高</p>
+<p><code>padding</code>：内边距（如 padding: 10px;）</p>
+<p><code>border</code>：边框（如 border: 1px solid black;）</p>
+<p><code>margin</code>：外边距（如 margin: 20px;）</p>
+<p><code>box-sizing</code>：控制盒模型计算方式（默认 content-box，推荐 border-box）</p>
+</li>
+<li><p>背景</p>
+<p><code>background-color</code>：背景颜色</p>
+<p><code>background-image</code>：背景图片（如 url(&#39;image.jpg&#39;)）</p>
+<p><code>background-position</code>：背景定位</p>
+<p><code>background-repeat</code>：背景重复（repeat、no-repeat、repeat-x）</p>
+<p><code>background-size</code>：背景大小（如 cover、contain）</p>
+</li>
+<li><p>定位与布局
+CSS 定位控制元素在页面中的位置：</p>
+<p>position：</p>
+<ul>
+<li><p>相关属性：</p>
+<p><code>static</code>：默认定位</p>
+<p><code>relative</code>：相对于自身位置偏移</p>
+<p><code>absolute</code>：相对于最近的定位祖先元素</p>
+<p><code>fixed</code>：相对于视口固定</p>
+<p><code>sticky</code>：混合 relative 和 fixed</p>
+</li>
+</ul>
+<p><code>top</code>、<code>right</code>、<code>bottom</code>、<code>left</code>：偏移量</p>
+<p><code>z-index</code>：控制叠放顺序</p>
+</li>
+<li><p>显示与浮动 (这里的内容已经不是很常用了！)</p>
+<p>display：</p>
+<ul>
+<li><p>控制元素显示方式</p>
+<p><code>block</code>：独占一行（如 div、p）</p>
+<p><code>inline</code>：不换行（如 span、a）</p>
+<p><code>inline-block</code>：行内块元素</p>
+<p><code>none</code>：隐藏元素</p>
+</li>
+</ul>
+<p><code>float</code>：元素浮动（left、right）</p>
+<p><code>clear</code>：清除浮动（left、right、both）</p>
+</li>
+<li><p>现代 CSS 布局技术</p>
+<p>Flexbox（弹性盒布局）是一种一维布局模型，适合排列行或列。
+<strong>基本概念：</strong></p>
+<p><code>Flex</code> 容器：设置 display: flex;的元素
+<code>Flex</code> 项：容器的直接子元素</p>
+<p><strong>常用属性</strong>：</p>
+<p>容器：</p>
+<p><code>flex-direction</code>：排列方向（row、column）</p>
+<p><code>justify-content</code>：主轴对齐（flex-start、center、space-between）</p>
+<p><code>align-items</code>：交叉轴对齐（stretch、center、flex-end）</p>
+<p>Flex 项：</p>
+<p><code>flex</code>：定义弹性比例（如 flex: 1）</p>
+<p><code>flex-grow</code>：增长比例</p>
+<p><code>flex-shrink</code>：收缩比例</p>
+<p><code>flex-basis</code>：基础大小</p>
+</li>
+</ol>
+<pre><code class="language-css">.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.item {
+  flex: 1;
+  margin: 10px;
+}
+</code></pre>
+<ol start="7">
+<li><p>Grid</p>
+<p>CSS Grid 是一个二维布局系统，适合复杂网格布局。
+<strong>基本概念：</strong></p>
+<p><code>Grid</code> 容器：设置 display: grid;的元素</p>
+<p><code>Grid</code> 项：容器的直接子元素</p>
+<p><strong>常用属性：</strong></p>
+<p>容器：</p>
+<p><code>grid-template-columns</code>：定义列宽</p>
+<p><code>grid-template-rows</code>：定义行高</p>
+<p><code>gap</code>：网格间距</p>
+<p><code>justify-content</code>、<code>align-content</code>：网格整体对齐</p>
+<p>Grid 项：</p>
+<p><code>grid-column</code>：指定列范围
+<code>grid-row</code>：指定行范围</p>
+<p>示例：</p>
+</li>
+</ol>
+<pre><code class="language-css">css.grid-container {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+}
+.grid-item {
+grid-column: span 2; /_ 跨两列 _/
+}
+</code></pre>
+<h3>动画与过渡</h3>
+<ol>
+<li>过渡（Transition）</li>
+</ol>
+<p>用于平滑改变 CSS 属性值：</p>
+<p><code>transition-property</code>：过渡的属性</p>
+<p><code>transition-duration</code>：持续时间</p>
+<p><code>transition-timing-function</code>：缓动函数（如 ease、linear）</p>
+<p><code>transition-delay</code>：延迟时间</p>
+<p>示例：</p>
+<pre><code class="language-css">cssbutton {
+  background-color: blue;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: green;
+}
+</code></pre>
+<ol start="2">
+<li>动画（Animation）</li>
+</ol>
+<p>通过@keyframes
+定义动画序列：</p>
+<p><code>animation-name</code>：动画名称</p>
+<p><code>animation-duration</code>：持续时间</p>
+<p><code>animation-iteration-count</code>：循环次数（如 infinite）</p>
+<p>示例：</p>
+<pre><code class="language-css">@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100px);
+  }
+}
+.element {
+  animation: slide 2s infinite;
+}
+</code></pre>
+<h3>响应式设计</h3>
+<p>响应式设计让网页适配不同设备。
+相对单位</p>
+<p><code>vw、vh</code>：视口宽高的百分比</p>
+<p><code>rem</code>：根字体大小的倍数</p>
+<p><code>em</code>：父元素字体大小的倍数</p>
+<p><code>%</code>：父元素尺寸的百分比</p>
+<ol>
+<li>媒体查询</li>
+</ol>
+<p>根据设备特性应用不同样式：</p>
+<pre><code class="language-css">@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    flex-direction: column;
+  }
+}
+</code></pre>
+<ol start="2">
+<li>响应式图片</li>
+</ol>
+<p>使用 <code>max-width</code>: 100%确保图片自适应</p>
+<p>使用 <code>srcset</code> 和 <code>sizes</code> 加载不同分辨率图片：</p>
+<pre><code class="language-html">&lt;img
+  src=&quot;small.jpg&quot;
+  srcset=&quot;large.jpg 1024w, medium.jpg 768w&quot;
+  sizes=&quot;(max-width: 600px) 100vw, 50vw&quot;
+/&gt;
+</code></pre>
+<h3>高级 CSS 技术</h3>
+<ol>
+<li>伪类与伪元素</li>
+</ol>
+<p>伪类：如:<code>hover</code>、:<code>nth-child(n)</code>、:<code>focus</code></p>
+<p>伪元素：如<code>::before</code>、<code>::after</code></p>
+<p>示例：</p>
+<pre><code class="language-css">cssdiv::before {
+  content: &quot;★&quot;;
+  color: gold;
+}
+</code></pre>
+<ol start="2">
+<li><p>变量（CSS Custom Properties）</p>
+<p>使用自定义属性存储值：</p>
+</li>
+</ol>
+<pre><code class="language-css">:root {
+  --primary-color: #007bff;
+}
+button {
+  background-color: var(--primary-color);
+}
+</code></pre>
+<ol start="3">
+<li>滤镜与变换</li>
+</ol>
+<p>滤镜（filter）：如 blur(5px)、grayscale(50%)</p>
+<p>变换（transform）：如 rotate(45deg)、scale(1.2)</p>
+<p>示例：</p>
+<pre><code class="language-css">img {
+  filter: sepia(100%);
+  transform: rotate(10deg);
+}
+</code></pre>
+<h1>最后</h1>
+<p>相信能看完这篇文档的人，一定很有耐心，但是在这里你不能学到所有东西，太多的属性，太多的值，不可能全部进行展示，你也要依照自己的设计理念不断变化他们的组合来完成自己的网页设计</p>
+<p>在这里对应的官网来学习更多的知识
+MDN Web Docs：CSS 参考文档（<a href="https://developer.mozilla.org%EF%BC%89">https://developer.mozilla.org）</a></p>
+
+    </article>
+    </body>
+    </html>
