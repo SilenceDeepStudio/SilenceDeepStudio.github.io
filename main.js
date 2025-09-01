@@ -11,7 +11,7 @@ const CATEGORY_MOD_ID = "modeling"; // 建模分类section ID
 
 // 分类映射表
 const CATEGORY_MAP = {
-  [CATEGORY_PRO_ID]: ["HTML_", "PYTHON", "Cscript", "STM32", "TOOL"],
+  [CATEGORY_PRO_ID]: ["HTML_", "PYTHON", "Cscript", "STM32", "TOOL", "Server"],
   [CATEGORY_MOD_ID]: [
     "3DMAX",
     "Blender",
@@ -82,7 +82,7 @@ async function convertMdToHtml(mdPath) {
         padding-bottom: 0.5rem;
       }
       p {
-        text-indent: 2em; /* 首行缩进2字符 */
+        text-indent: 2em; 
       }
       pre {
         background: #f5f5f5;
@@ -129,7 +129,7 @@ async function convertMdToHtml(mdPath) {
         height: auto;
         border-radius: 4px;
         display: block;
-        margin: 0 auto; /* 图片居中 */
+        margin: 0 auto;
       }
     </style>
     </head>
