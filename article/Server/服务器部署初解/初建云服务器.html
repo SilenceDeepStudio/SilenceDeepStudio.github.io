@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初建云服务器</title>
+    <style>
+      body {
+        background: linear-gradient(
+          90deg,
+          #e0f2ff 0%,
+          #f8fafc 40%,
+          #f8fafc 60%,
+          #e0f2ff 100%
+        );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #333;
+      }
+      h1 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        text-align: center;
+        font-size: 2.5rem;
+      }
+      h2,
+      h3 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      p {
+        text-indent: 2em; 
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      code {
+        font-size: 1rem;
+        background: #f5f5f5;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+      }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .back-link {
+        margin-bottom: 2rem;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.12);
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #38c6ff 0%, #4f8cff 100%);
+        box-shadow: 0 4px 16px rgba(56, 198, 255, 0.18);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
+    </head>
+    <body>
+    <div class="back-link">
+    <a class="back-btn" href="../../../index.html">← 返回首页</a>
+    </div>
+    <article>
+    <h1>云资源的简单部署</h1>
+<p>一般情况下如果我们没有需要向公共状态下传输的资源我们并不会用到很强大的服务器，他可以为我们提供一种额外的计算资源。还能为我们提供一个网站发布的温床环境，网站的部署一般是我们进行服务器操作的需求基础，因为正是这样的需求，使网站可以供更多人进行浏览，才有了服务器</p>
+<p>服务器在近代的发展非常迅速，有些人可能并没有很强大的初始资源导致我们不得不使用一些其他云服务器资源，云服务器资源既简便还能够满足我们的快速操作。</p>
+<h2>云服务器购买</h2>
+<p>云服务器的购买商家非常多，我们可以根据自己的需求选择不同的商家，一般情况下我们会选择一些比较稳定的商家，因为服务器的稳定性对于我们的网站的运行非常重要。</p>
+<p>常见的有阿里云、腾讯云、华为云等，当然他们对服务器的名称也大不相同，但是对于功能来说是一模一样的，比如阿里云的服务器我们一般会叫 ECS，腾讯云的服务器我们一般会叫 CVM，华为云的服务器我们一般会叫 ECS。购买的时候一般他们各个商家都会有各自的活动，这些活动可以让我们省下一大笔开销，让我们购买服务器购买域名，服务器的购买我们并不需要一下子购买最顶级的，我们追寻一个原则就是我们需要什么样子的需求，就购买怎样的服务器资源。</p>
+<p>如果你只需要一个简单的静态资源的网站，那么你只需要一个 1 核 1G 的服务器就可以了，因为静态资源的访问量一般不会很大，所以 1 核 1G 的服务器就可以满足我们的需求。如果你在这个需求的同时可能需要一些动态资源，那么需要更大的内存，一般 2G 内存就可以满足中小企业的云资源请求需求。</p>
+<ul>
+<li>静态资源
+静态资源一般指代我们上传到服务器的固定资源，比如 index.html、css、js、图片等。我们并不需要经常变更他们，只需要经过我们的调试然后通过一些放置直接放置在云服务器上即可，剩下的就是可能会更改其中的某些内容，哪些属于动态资源。</li>
+<li>动态资源
+动态资源一般指代我们上传到服务器的动态资源，比如 php、mysql、java 等。我们需要经常变更他们，因为他们需要根据我们的需求进行变更，所以他们一般是指一种可以自运行的，需要我们进行配置的资源。</li>
+</ul>
+<h2>域名购买</h2>
+<p>有了这些云服务器的资源后，我们就有了一个远端的可以供我们进行操作的温床，那么其实就可以直接在内部进行部署了，但是直接在服务器的内部进行部署操作这十分危险，因此我们一般在本地进行，另外我们在本地进行网站的编写测试，可以通过各种本地的 IDE 编写，这就需要各位各显神通了。这里不做展开。</p>
+<p>我们有了温床下一步就是公开我们的默认端口，这个端口其实就是 80 端口，这是一个默认的开放端口，外部的网络爬虫和搜索引擎的爬虫都是通过这个爬虫来获取我们的对应的网页的 TDK 信息的，不过贸然公开我们的网站时不可靠不安全的，因此我们需要一种命名方式来隐藏我们的公网 ip，这个东西就是域名，他可以帮我们携带我们的公网 IP 的内容，不过解析这些内容可不是通过我们自己的设备而是</p>
+<ul>
+<li>DNS 服务器
+这种服务器是用来解析我们的域名的，他可以帮我们将我们的域名解析成我们的公网 IP，这样我们就可以通过域名来访问我们的网站了。这个步骤又可以分为很多个步骤进行，比如首先把我们的顶级域名提交给顶级 DNS 服务器，他会帮我们找在这个顶级域名下的一级域名，通过放松给我们客户端，我们的客户端并明白了原来一级域名的 DNS 服务器的位置在哪里，然后我们在去找这个一级域名 DNS 服务器的位置，去问问它知道二级域名的位置吗，如果它知道，那我们就取出对应的服务器地址，然后按照这个地址就可以去找找我们想要的资源到底在哪个位置了！！！就饿可以愉快的浏览网页了</li>
+</ul>
+<h2>进行备案</h2>
+<p>为什么需要备案捏？，这是因为我们的服务器是在公网上的，公网上的服务器是需要备案的，备案的话可以帮我们隐藏我们的服务器的真实 IP，防止一些不法分子通过我们的服务器进行攻击，备案的话也可以帮我们隐藏我们的服务器的真实位置，防止一些不法分子通过我们的服务器进行攻击。</p>
+<p>攻击服务器的方式多种多样，DDos 攻击便是很经常的一种，简单介绍一下他的攻击方式，其实就是通过向服务器发送大量的请求，使得服务器的资源被耗尽，从而导致服务器无法正常工作。就算是遇到了正常客户的请求我们的服务器也因为资源的消耗无法正确返回客户需要的内容！</p>
+<p>当然还有很多其他的攻击方式，也就是渗透方式，其实网络上大部分装逼的内容都是通过前端的内容去推断，其内容放置在哪里，这些内容通过了那些加密，我们就可以通过反加密来解码出其中的正确内容，这样就可以攻击我们的个人信息了，不过现在已经有很多方式可以避免这种方式，比如把这些内容直接放置到我们的云服务器上，不让他可访问其实就可以了。</p>
+<p>对于这些攻击和渗透方式，其实有很多种的方式进行反击，我们红客就发明出了在云服务器前端的一些防护服务器，他可以帮我们进行筛选递来的请求是否是攻击还是正常的请求，这样就可以避免一些攻击的发生。</p>
+<h2>云服务器的操作简易手册</h2>
+<p>购买服务器中我嫩要明白我们的操作系统可能很少在见到 win 系统了，当然除了一些特殊的情况，比如我们想要开放一些游戏的服务器，这些服务器被提供的游戏版本其实大部分也是 win 系统，这最常见的就是我们说的《我的世界》。</p>
+<p>好的我们已经清楚了这些简单的内容，就可以着手操作我们的 Linux 系统了！！！</p>
+<p>linux 系统也分很多种，我们最常见的部署网站的系统被叫做 CentOS，他是一个基于 Red Hat Enterprise Linux（RHEL）的开源操作系统，他的稳定性和安全性都非常高，被广泛应用于服务器领域。但是他的操作也基本上和 linux 的系统操作方式没有很大的区别。</p>
+<ul>
+<li>服务器的系统安装
+我们在购买服务器的时候一般会有一个系统的安装选项，我们可以选择安装我们的系统，一般情况下我们会选择安装我们的 CentOS 系统，可以选择其它系统，这里的记录时 centos 系统。</li>
+</ul>
+<h2>服务器的配置方式和内容</h2>
+<p>首先安装我们需要工具也就是 git，我们可以通过 git 来进行我们的服务器的操作。</p>
+<ul>
+<li>安装 git
+我们可以通过以下命令来安装 git<pre><code>yum install git
+</code></pre>
+安装完成后我们可以通过以下命令来检查是否安装成功<pre><code>git --version
+</code></pre>
+</li>
+<li>配置 git
+我们可以通过以下命令来配置 git<pre><code>git config --global user.name &quot;yourname&quot;
+git config --global user.email &quot;youremail@example.com&quot;
+</code></pre>
+这里是不是就已经有些熟悉了，因为在其他的记录中已经对于这些进行了简单的记录，按照那些方式进行一样的操作就可以了，只是最前端的下载 git 时，不再是通过 win 里下载的安装包，而是通过 yum 来进行安装的。</li>
+</ul>
+<p>安装完成后就可以通过之前的一些操作方式来进行我们的代码移动和上传了。</p>
+<p>我们需要还需要一个轻量化的软件来公开我们的网站，这个软件被叫做 nginx，他是一个高性能的 Web 服务器，也可以作为反向代理服务器、负载均衡器等。</p>
+<p>我们可以通过以下命令来安装 nginx</p>
+<pre><code class="language-bash">yum install nginx
+</code></pre>
+<p>安装完成后我们可以通过以下命令来检查是否安装成功</p>
+<pre><code class="language-bash">nginx -v
+</code></pre>
+<p>好的到此为止我们只记录较为表面的最简单的内容，首先我们先输入以下代码查看我们的 nginx 是否正常工作，</p>
+<pre><code class="language-bash">systemctl status nginx
+</code></pre>
+<p>如果显示 active 则说明 nginx 已经正常工作了。
+我们还要查看一下 nginx 的配置文件是否正常</p>
+<pre><code class="language-bash">nginx -t
+</code></pre>
+<p>如果显示 success 则说明 nginx 的配置文件没有问题。</p>
+<p>我们首先要知道一个部署过程需要我们首先定义在那个端口上进行外传，比如在我们的服务器上开设 80 默认端口让大家来观看网站内容，我们就可以在云服务器的安全组内添加 80 端口，这样就可以让外部的网络爬虫和搜索引擎的爬虫来访问我们的网站了。同样的我们也可以通过这个服务器的公网 IP 来访问他的内容了</p>
+<p>但是我们到底访问的是什么内容呢？</p>
+<p>我们打开这个文件</p>
+<pre><code class="language-bash">vim /etc/nginx/nginx.conf
+</code></pre>
+<p>他的内容往往是这样的，</p>
+<pre><code class="language-nginx">worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    server {
+        listen       80;
+        listen       [::]:80;
+        server_name  www.pujiali.online;
+        root         /usr/share/nginx/jiangsupujiali.github.io/;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        error_page 404 /404.html;
+        location = /404.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+        }
+    }
+}
+</code></pre>
+<p>这个内容的意思是，我们的域名是 pujiali.online，我们可以通过更改 root 的内容来更改我们需要展示的文件内容的位置。
+比如我们现在展示的网页其实就是/usr/share/nginx/jiangsupujiali.github.io/ 这个目录下的内容。</p>
+<p>默认的展示网页就是 index.html，因此说明它非常重要，他旗下的各种子网页子资源，也都是通过它进行导航的。</p>
+<p>但是不要急，你的内容和我的肯定不一样，因为，默认的地址一般是 usr/share/nginx/html/ 这个目录下的内容。你可以通过</p>
+<pre><code class="language-bash">cd /usr/share/nginx/html/
+</code></pre>
+<p>来查看一下默认的内容。
+可以通过 vim 来查看一下默认的内容。</p>
+<pre><code class="language-bash">vim index.html
+</code></pre>
+<p>如果你输入你的服务器的公网地址后，默认出来的内容与这个 index.html 的内容是一样的，说明你的服务器已经正常工作了！！！</p>
+<h3>云静态资源的简单配置</h3>
+<p>在我们进行网站的建立时我们一定故需要考虑我们的网站的后期维护，比如说我们有很多相通的案例需要我们进行展示，那么我们肯定需要一些枯燥的，重复的内容，可以通过书写一些 JS 脚本来避免这个过程</p>
+<p>比如通过 js 来生成，更改 html 文件的内容块，检测工作空间下的文件更新内容，来生成新的动态卡片，动态内容，这些其实也算是动静掺半的资源内容，然后我们甚至需要一些 MySQL 数据库来存储我们的动态内容，这些都需要我们进行配置。</p>
+<p>比如我们在使用 tailwindcss 时也有提起这个内容，他会告诉你如何放置文件才是比较符合常规项目的放置方法，如果把这些养成习惯，那么很有可能增大我们的效率，一个比较常用的文件树如下</p>
+<pre><code>├── css
+│   ├── tailwindinput.css
+│   ├── tailwindoutput.css
+├── js
+│   ├── main.js
+├── index.html
+</code></pre>
+<p>这样的文件树既简便还简单易懂易于维护，同时也方便我们的后期调整，因为一般一些静态资源也需要我们调动对应的脚本运行对应的程序，添加调整服务器中的各种资源。</p>
+<h3>动态内容的配置</h3>
+<p>我们经常使用的一些动态脚本的资源其实在 github 的记录中有过相应的介绍，比如我们自己书写的工作流，它可以依赖我们的部署逻辑运行固定的脚本，依照不同的资源生成我们需要的数据！一些网站内也许要放置用户的数据，比如用户的账号，密码等等数据，这也算是动态资源。</p>
+<p>从此可以看出其实我们的资源做好动静分离是很有必要的！！！</p>
+<h2>总结</h2>
+<p>我们现在已经有了非常基础的服务器的搭建网站的部署方式，接下来我们可以查看我们的服务器还可以下载那些软件，我们有可以通过这些软件来完成什么样的功能，这就需要我们自己动手尝试和查找了。</p>
+
+    </article>
+    </body>
+    </html>
