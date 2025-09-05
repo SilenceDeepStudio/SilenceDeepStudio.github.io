@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDRI贴图操作</title>
+    <style>
+      body {
+        background: linear-gradient(
+          90deg,
+          #e0f2ff 0%,
+          #f8fafc 40%,
+          #f8fafc 60%,
+          #e0f2ff 100%
+        );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #333;
+      }
+      h1 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        text-align: center;
+        font-size: 2.5rem;
+      }
+      h2,
+      h3 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      p {
+        text-indent: 2em; 
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      code {
+        font-size: 1rem;
+        background: #f5f5f5;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+      }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .back-link {
+        margin-bottom: 2rem;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.12);
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #38c6ff 0%, #4f8cff 100%);
+        box-shadow: 0 4px 16px rgba(56, 198, 255, 0.18);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
+    </head>
+    <body>
+    <div class="back-link">
+    <a class="back-btn" href="../../../index.html">← 返回首页</a>
+    </div>
+    <article>
+    <h1>HDRI 环境搭建</h1>
+<ul>
+<li>如何使用环境贴图——快速搭建一个环境包含了打光，背景设计，还有视觉纵深。
+在动画的制作过程中，总会有环境搭建这一部分，例如：做一个小型工业器械的工作流程动画，需要搭建一个工厂的环境；做一房间设计图，需要在屋外搭建环境，让窗户外的光和环境自然的打进来。</li>
+</ul>
+<p>不同的 HDRI 的贴图其实可以携带不同的环境光，有些贴图它自带环境光较强，因此不需要我们自己在添加其他效果光照，之际额使用即可。
+在 max 中使用贴图直接如以下步骤即可：</p>
+<p>按 8 打开环境与效果窗口，环境贴图选择位图（vray），将 hrdi 拖到位图上。
+<img alt="设置图片" src="image.png" width="500">
+<img alt="设置图片" src="image-1.png" width="500"></p>
+<p>将该贴图上给一个新的材质球，贴图类型选择球形，在视图-视口配置-背景-使用环境背景，可以让背景表现为 hdri 图，若是贴图的光或者视图的视角不合适，可以水平旋转调整到合适的位置，但是垂直旋转就尽量不要用，垂直方向上大部分都是设计好的，环境贴图的光可以通过全局倍增来调整大小。</p>
+<h1>案例一</h1>
+<p>当不添加环境贴图时，环境光会因为外界没有相应的贴图而过曝，使整个效果表现不理想。
+<img alt="设置图片" src="image-2.png" width="500">
+当添加环境贴图后，窗外的画面会更加自然，打光也恰好。如果需要我们进行更加详细的调节我们就可以直接提高全局倍增。
+<img alt="设置图片" src="image-3.png" width="500">
+在 vary 的插件中我们可以直接打开穹顶光，提高亮度，在 vary 中还可以直接更改不同的灯光设置，如下图</p>
+<h1>案例二</h1>
+<p>小型工业机械可以搭建在工厂和实验室的场景中，但是场景搭建耗时耗力，搭建一个简单的又显的太敷衍，而且效果也比较一般，如下：
+<img alt="设置图片" src="image-4.png" width="500">
+使用一个工厂环境的 hdri 贴图，会使该机械的显示更加合理，不会突兀，而且环境光也更加贴近现实，对其使用环境也更贴近。
+<img alt="设置图片" src="image-6.png" width="500">
+<img alt="设置图片" src="image-5.png" width="500"></p>
+<h1>总结</h1>
+<p>使用环境贴图可以达到事半功倍的效果，比自己搭建场景更加合适，省去了场景的打光、贴图、建模和上材质的过程，不过 hdri 一般是从网页上寻找下载的，对于比较苛刻的场景没有就可能需要自己建模，而且环境贴图也并非全都合适，总之，环境贴图更加省力省时，但是若没有合适的，仍需要要自己搭建场景。</p>
+
+    </article>
+    </body>
+    </html>
