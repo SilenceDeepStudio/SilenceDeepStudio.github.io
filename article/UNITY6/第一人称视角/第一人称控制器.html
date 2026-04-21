@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第一人称控制器</title>
+    <style>
+      body {
+        background: linear-gradient(
+          90deg,
+          #e0f2ff 0%,
+          #f8fafc 40%,
+          #f8fafc 60%,
+          #e0f2ff 100%
+        );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #333;
+      }
+      h1 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        text-align: center;
+        font-size: 2.5rem;
+      }
+      h2,
+      h3 {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      p {
+        text-indent: 2em; 
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      code {
+        font-size: 1rem;
+        background: #f5f5f5;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+      }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .back-link {
+        margin-bottom: 2rem;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.12);
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #38c6ff 0%, #4f8cff 100%);
+        box-shadow: 0 4px 16px rgba(56, 198, 255, 0.18);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
+    </head>
+    <body>
+    <div class="back-link">
+    <a class="back-btn" href="../../../index.html">← 返回首页</a>
+    </div>
+    <article>
+    <h1>第一人称控制器</h1>
+<p>对于一个游戏而言第一人称控制器是一个非常重要的部分，它连接了游戏内的人物，玩家通过操作控制器来完成与游戏内的物品进行交互的功能。</p>
+<p>对于他来说，有很多变量不能一次性给定，需要在游戏中调整某些数值的大小，不断调整譬如移动速度，跑步速度，跳跃高度等。空中控制系数，还有在视角方面，我们需要定义灵敏度，视角的长宽比例，摄像头的可渲染层。以及人物的状态，是否在跳跃状态，如果一个人物我们需要定义他的某些特殊的属性，比如他的是否可以进行二次跳跃，在什么反应时间内需要这样的操作。所以我们列举一些常用的第一人称需要了解的变量内容</p>
+<ul>
+<li>基础属性<ul>
+<li>walkspeed 人物的正常移动速度</li>
+<li>runspeed 人物的跑步速度</li>
+<li>jumpheight 人物的跳跃高度</li>
+<li>aircontrol 空中控制系数</li>
+<li>acceleration 加速度</li>
+<li>grounddrag 地面阻力</li>
+<li>airdrag 空气阻力</li>
+</ul>
+</li>
+<li>视角属性<ul>
+<li>mousesensitivity 鼠标灵敏度</li>
+<li>maxlookangle 最大的视角角度</li>
+</ul>
+</li>
+<li>物理属性<ul>
+<li>groundlayer 地面层</li>
+<li>groundcheck 地卖检测值</li>
+<li>groundcheckradius 地面检测半径</li>
+</ul>
+</li>
+<li>组件内容<ul>
+<li>rigibody 刚体组件</li>
+<li>playerinput 玩家输入组件</li>
+<li>cameratransform 相机组件</li>
+</ul>
+</li>
+<li>状态变量<ul>
+<li>isground 是否在地面</li>
+<li>isjump 是否在跳跃状态</li>
+<li>xrotation 相机的旋转角度</li>
+<li>moveinput 输入移动</li>
+<li>lookinput 输入视角</li>
+<li>jumpinput 跳跃输入</li>
+</ul>
+</li>
+</ul>
+<p>在这之中有些新内容时 UNIYT6 新增的内容，一方面，6 的增新内容增添了 UniversalRenderPipeline 为其默认的如渲染管线，也就是说我们可以直接在新建项目的时候就可以直接选择生成罪行的 URP lit 的材质渲染管线，来完成一些较为复杂的渲染过程。不过另外需要我们注意的是新增添了 input action 输入动作，我们需要在项目设置中进行设置，将输入动作设置为我们自己定义的输入动作。这让我们操作也变得非常容易。</p>
+<p>这些是引擎部分的建模材质调节过程，并不在第一人称控制器的范围内。</p>
+<h2>移动</h2>
+<p>在我们规定好一些基础属性准备开始制作时我们还需要按照 unity 的官方文档，将我们的控制角色添加一个 rigidbody 刚体组件，用来处理物理运动。添加一个 playerinput 组件用来引入新增的输入组件。如下图
+<img src="image.png" alt="alt text">
+我们可以在其中二看到在 playerinput 的组件中已经引用了对应的 unity 提供的一个 inputsystem_action 的预制资源，我们先来看看其中都有什么？
+<img src="image-1.png" alt="alt text">
+首先我们看到的内容是主要的控制动作，比如移动，跳跃等等，当我们看向这些动作都有什么来控制的时候可以看到 move 需要通过一个二元向量来控制
+<img src="image-2.png" alt="alt text"></p>
+<p>我们来看看官方文档如何进行描述这个作用</p>
+<p>Each default action has bindings to several different types of Control. For example:</p>
+<ul>
+<li>The &quot;Move&quot; action is bound to the &quot;WSAD&quot; keyboard keys and arrow keys, a gamepad stick, the primary 2D axis on an XR controller</li>
+<li>The &quot;Jump&quot; action is bound to the space key, the &quot;south&quot; button on a gamepad, and the secondary button on an XR controller.</li>
+</ul>
+<p>是的他已经帮我们绑定好了在不同操作方式中的不同操作按键，我们只需要获取在按键时所获取的输入值即可，但后把这个二输入值进行加工来控制角色的 tranform 组件来控制角色运行即可</p>
+<p>所以我们就可以写出移动的代码了</p>
+<pre><code class="language-C#">private void GatherInput()
+{
+    moveInput = playerInput.actions[&quot;Move&quot;].ReadValue&lt;Vector2&gt;()；
+}
+</code></pre>
+<p>这个代码表示提取我们通过操作wasd键或者方向键所获取的输入值，这个输入值按照官方文字当时一个二维数组，二维数组的数值存储在我们自己自行声明的全局变量moveInput中，以便于控制使用，这个函数沃恩需要放置在update的函数中每帧调用以用来更新我们的变量数据。</p>
+<p>这个部分输出的数据moveInput我们需要在另一个函数中使用，这个函数用来拆分其二维向量的xy值，用来控制角色的移动，具体代码如下：</p>
+<pre><code class="language-C#">private void HandleMovement()
+{
+    // 计算目标水平速度
+  bool isSprinting = playerInput.actions[&quot;Sprint&quot;].IsPressed();
+  float targetSpeed = isSprinting ? sprintSpeed : walkSpeed;
+
+  Vector3 targetVelocity = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized * targetSpeed;
+  targetVelocity.y = rb.linearVelocity.y; // 保持垂直速度不变
+
+  // 计算加速度
+  Vector3 velocityDifference = targetVelocity - rb.linearVelocity;
+  velocityDifference.y = 0; // 只在水平方向加速
+
+  float currentAcceleration = isGrounded ? acceleration : acceleration * airControl;
+  Vector3 movementForce = velocityDifference * currentAcceleration;
+
+  rb.AddForce(movementForce, ForceMode.Acceleration);
+}
+</code></pre>
+<p>如果不放心刚体组件会因为重力效果导致角色会因为重力而摔倒，可以在这里进行更改：
+<img src="image-3.png" alt="alt text">
+其中的freeze rotation 冻结旋转冻结三个轴向的旋转，
+除此之外我们需要把这个HandleMovement函数也放在update函数中每帧调用一次，以用来更新角色的移动。但是要放在GatherInput之后以为首先需要更新输入数据，才可以更新目标物体的移动！</p>
+<h3>地面检测</h3>
+<p>这个检测用来控制我们的角色在地面上时使用地面的控制系数，不在地面的时候我们使用空中的控制系数，保证我的的角色控制不出现可笑的bug，地面检测有两种方式</p>
+<ol>
+<li><p>物理检测
+什么叫物理检测，我们在我们人物的脚下生成一个大小固定的球形检测区域，这个检测区域的代码如下：</p>
+<pre><code class="language-C#">    private void CheckGrounded()
+ {
+     bool wasGrounded = isGrounded;
+     isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+
+     if (isGrounded)
+     {
+         isJumping = false;
+     }
+
+     // 落地时重置垂直速度
+     if (!wasGrounded &amp;&amp; isGrounded)
+     {
+         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+     }
+ }
+</code></pre>
+<p> 其中的groundcheck是我们在人物脚下生成的一个球形检测区域，groundcheckradius是检测区域的半径，groundlayer是我们的地面层，这个地面层我们需要在项目设置中进行设置，将我们的地面层设置为一个单独的层，这样我们才能在检测时只检测地面层，而不会检测到其他物体。
+ 我们需要在update函数中每帧调用一次这个函数，以用来更新我们的地面检测状态。
+ 另外还有一个小技巧，如果我们就这样的写，我们并不能直接看到球形区域的大小，我们可以使用unity提供给我们的辅助函数来解决这个问题，代码如下：</p>
+<pre><code class="language-C#">private void OnDrawGizmosSelected()
+{
+    Gizmos.color = Color.red;
+    Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+}
+</code></pre>
+<p> 其中的OnDrawGizmosSelected函数是unity提供的一个辅助函数，用来在场景中绘制一些辅助的图形，比如我们这里绘制的球形区域，这样我们就可以直接在场景中看到我们的球形区域的大小了。图片如下：
+ <img src="image-4.png" alt="alt text">这样就可以便捷的调节这个地面检测的半径了，这里使用这样的检测方法是比较推荐的，这是因为我们的角色的碰撞检测的物理碰撞检测往往是一个如图的胶囊物体，这往往是带有体积的，我们可以通过检测脚部底面的一部分进行判断是否人物处在地面上，如果我们使用射线检测呢？</p>
+<p> 他检测的只能是通过我们的一个点的射线，射线并不能因为角色拥有物理体积大小而去判断我们的角色的脚部这个带有体积的物体的中心点，也就是说我们因为更改为一个射线检测造成了我们并不能通过体积的检测更加符合现实中检测方式</p>
+</li>
+<li><p>射线检测
+使用射线检测也是一种非常常见的地面检测方式，这个种方式是通过从脚部底端放射一条射线，这条射线乡下发射，碰撞到我们设置好的地面层级，返回距离，通过距离的判断来检测是否在地面上，
+代码如下：</p>
+<pre><code class="language-C#">private void CheckGrounded()
+{
+    bool wasGrounded = isGrounded;
+    isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckRadius, groundLayer);
+
+    if (isGrounded)
+    {
+        isJumping = false;
+    }
+
+    // 落地时重置垂直速度
+    if (!wasGrounded &amp;&amp; isGrounded)
+    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+    }
+}
+</code></pre>
+<p>其中的groundcheck是我们在人物脚下生成的一个射线检测区域，groundcheckradius是检测区域的半径，groundlayer是我们的地面层，这个地面层我们需要在项目设置中进行设置，将我们的地面层设置为一个单独的层，这样我们才能在检测时只检测地面层，而不会检测到其他物体。
+我们需要在update函数中每帧调用一次这个函数，以用来更新我们的地面检测状态。
+另外还有一个小技巧，如果我们就这样的写，我们并不能直接看到射线的大小，我们可以使用unity提供给我们的辅助函数来解决这个问题，代码如下：</p>
+<pre><code class="language-C#">private void OnDrawGizmosSelected()
+{
+    Gizmos.color = Color.red;
+    Gizmos.DrawRay(transform.position, Vector3.down * groundCheckRadius);
+}
+</code></pre>
+<p>这样我们就可以通过全局变量isground配合来选用不同的控制系数，来控制角色在不同状态下的移动系数。</p>
+</li>
+</ol>
+<h2>视角</h2>
+<p>相同道理的我们也需要在GatherInput函数中使用</p>
+<pre><code class="language-C#">private void GatherInput()
+{
+  lookInput = playerInput.actions[&quot;Look&quot;].ReadValue&lt;Vector2&gt;();
+}
+</code></pre>
+<p>这样我们的逻辑就完全一样了，也是每帧调用一次，以用来更新我们的视角。将该lookInput数据作为全局变量来控制我们的视角，代码如下：</p>
+<pre><code class="language-C#">private void HandleLook()
+{
+    // 计算旋转角度
+    float targetYaw = transform.eulerAngles.y + lookInput.x * lookSpeed;
+    float targetPitch = transform.eulerAngles.x - lookInput.y * lookSpeed;
+
+    // 限制俯仰角
+    targetPitch = Mathf.Clamp(targetPitch, -90f, 90f);
+
+    // 应用旋转
+    transform.eulerAngles = new Vector3(targetPitch, targetYaw, 0f);
+}
+</code></pre>
+<p>在这个函数中我们有一个非常重要的地方就是限制俯仰角，防止我们的角色上下旋转超过90度，导致我们的角色上下翻转，代码如下：</p>
+<pre><code class="language-C#">targetPitch = Mathf.Clamp(targetPitch, -90f, 90f);
+</code></pre>
+<p>这里有一个概念叫做万向锁，这个概念来自于欧拉角的定义，欧拉角是一种用来表示旋转的角度的方法，欧拉角的定义是：</p>
+<pre><code class="language-C#">transform.eulerAngles = new Vector3(pitch, yaw, roll);
+</code></pre>
+<p>但是由于其中一个轴向因为旋转90度后会导致其他的两个旋转方向的功能重复的问题，所以我们需要限制俯仰角的范围，防止角色上下翻转。在我们的最开始的全局变量中就有定义他的数值大小maxLookAngle，代码如下：</p>
+<pre><code class="language-C#">public float maxLookAngle = 80f;
+</code></pre>
+<p>如此我们就把我们的该脚本放置到对应的玩家身上，记得一定要添加三种组件，</p>
+<ol>
+<li>刚体组件</li>
+<li>玩家输入组件</li>
+<li>在子物体中添加相机组件</li>
+</ol>
+
+    </article>
+    </body>
+    </html>
